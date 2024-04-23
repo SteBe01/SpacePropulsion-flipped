@@ -61,22 +61,21 @@ close all
 
 tracesbar1_data = load("tracesbar1.mat");
 
-P_eff_vect = zeros(9, 3);
-rb_vect = zeros(9, 3);
-k = 0;
+P_eff_vect = zeros(1, 27);
+rb_vect = zeros(1, 27);
+k = 1;
 for ii = 38:46
-    k = k + 1;
-
     item = strcat("tracesbar1_data.pbar24", int2str(ii));
     item = eval(item);
     item = reordering(item);
 
-    [P_eff_vect(k,1), rb_vect(k,1)] = pr_evaluation(item(:,1));
-    [P_eff_vect(k,2), rb_vect(k,2)] = pr_evaluation(item(:,2));
-    [P_eff_vect(k,3), rb_vect(k,3)] = pr_evaluation(item(:,3));
+    [P_eff_vect(k), rb_vect(k)] = pr_evaluation(item(:,1));
+    [P_eff_vect(k+1), rb_vect(k+1)] = pr_evaluation(item(:,2));
+    [P_eff_vect(k+2), rb_vect(k+2)] = pr_evaluation(item(:,3));
+
+    k = k + 3;
 end
 clear ii k item
 
-[lowP.a, lowP.Inc_a, lowP.n, lowP.Inc_n, lowP.R2] = Uncertainty(P_eff_vect(:,1), rb_vect(:,1));
-[mediumP.a, mediumP.Inc_a, mediumP.n, mediumP.Inc_n, mediumP.R2] = Uncertainty(P_eff_vect(:,2), rb_vect(:,2));
-[highP.a, highP.Inc_a, highP.n, highP.Inc_n, highP.R2] = Uncertainty(P_eff_vect(:,3), rb_vect(:,3));
+[a, Inc_a, n, Inc_n, R2] = Uncertainty(P_eff_vect, rb_vect);
+

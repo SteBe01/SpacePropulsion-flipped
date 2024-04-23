@@ -1,5 +1,8 @@
 function [P_eff, rb] = pr_evaluation(vector)
     [maxVal, pos] = max(vector);
+    if pos < 0.01*length(vector)
+        [maxVal, pos] = max(vector(ceil(0.01*length(vector)):end));
+    end
     
     refVal = 0.05 * maxVal;
 
