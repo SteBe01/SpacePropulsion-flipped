@@ -61,8 +61,17 @@ close all
 
 tracesbar1_data = load("tracesbar1.mat");
 
-P_eff_vect = zeros(1, 27);
-rb_vect = zeros(1, 27);
+propData.Din = 0.1;
+propData.Dout = 0.16;
+propData.L = 0.29;
+propData.rho = 1762;
+
+At = pi*([28.80; 25.25; 21.81]*1e-3).^2/4; % Throat area [m^2]
+At_vec = repmat(At, [9 1]);
+
+P_eff_vect = zeros(27, 1);
+rb_vect = zeros(27, 1);
+cstar_vec = zeros(27,1);
 k = 1;
 for ii = 38:46
     item = strcat("tracesbar1_data.pbar24", int2str(ii));
@@ -70,12 +79,16 @@ for ii = 38:46
     item = reordering(item);
 
     [P_eff_vect(k), rb_vect(k)] = pr_evaluation(item(:,1));
+    [cstar_vec(k)] = cstar_evaluation(item(:,1), At(1), propData);
     [P_eff_vect(k+1), rb_vect(k+1)] = pr_evaluation(item(:,2));
+    [cstar_vec(k+1)] = cstar_evaluation(item(:,2), At(2), propData);
     [P_eff_vect(k+2), rb_vect(k+2)] = pr_evaluation(item(:,3));
+    [cstar_vec(k+2)] = cstar_evaluation(item(:,3), At(3), propData);
 
     k = k + 3;
 end
 clear ii k item
 
 [a, Inc_a, n, Inc_n, R2] = Uncertainty(P_eff_vect, rb_vect);
-
+cstar = mean(cstar_vec);
+cstar_std = std(cstar_vec);
