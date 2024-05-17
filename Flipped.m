@@ -25,6 +25,9 @@ for ii = 38:46
     [maxVal3, pos3] = max(item(:,3));
 end
 
+xlabel('time [ms]');
+ylabel('pressure [bar]');
+
 
 %% error check
 
@@ -35,7 +38,7 @@ for ii = 38:46
     item = eval(item);
     temp = plot(item(:));
     title(ii)
-    pause(0.5)
+    pause(1)
     delete(temp)
 end
 close all
@@ -48,7 +51,7 @@ for ii = 38:46
     item = reordering(item);
     temp = plot(item(:));
     title(ii)
-    pause(0.5)
+    pause(1)
     delete(temp)
 end
 close all
@@ -92,3 +95,7 @@ clear ii k item
 [a, Inc_a, n, Inc_n, R2] = Uncertainty(P_eff_vect, rb_vect);
 cstar = mean(cstar_vec);
 cstar_std = std(cstar_vec);
+
+Rel_Inc_a = Inc_a / a;
+Rel_Inc_n = Inc_n / n;
+Rel_Inc_cstar = cstar_std / cstar;
